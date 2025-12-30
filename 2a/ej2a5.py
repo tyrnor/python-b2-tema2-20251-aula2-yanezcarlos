@@ -27,7 +27,7 @@ Ejemplo:
         Un gráfico mostrando los datos originales, la regresión lineal y la interpolación.
 """
 
-from scipy import interpolate
+from scipy import interpolate, optimize
 import numpy as np
 import matplotlib.pyplot as plt
 import typing as t
@@ -37,12 +37,68 @@ def linear_regression_and_interpolation(
     data_x: t.List[float], data_y: t.List[float]
 ) -> t.Dict[str, t.Any]:
     # Write here your code
-    pass
+    
+    x = np.array(data_x)
+    y = np.array(data_y)
+
+    # ----- Linear regression -----
+    def linear_model(x, a, b):
+        return a * x + b
+
+    params, _ = optimize.curve_fit(linear_model, x, y)
+    slope, intercept = params
+
+    y_regression = linear_model(x, slope, intercept)
+
+    # ----- Interpolation -----
+    interp_func = interpolate.interp1d(x, y, kind="linear")
+    interpolated_data = interp_func(x)
+
+    return {
+        "linear_regression": {
+            "slope": slope,
+            "intercept": intercept,
+            "y_values": y_regression,
+        },
+        "interpolated_data": interpolated_data,
+    }
 
 
 def plot_results(data_x: t.List[float], data_y: t.List[float], results: t.Dict):
     # Write here your code
-    pass
+    
+    x = np.array(data_x)
+    y = np.array(data_y)
+
+    plt.figure(figsize=(10, 6))
+
+    # Original data
+    plt.scatter(x, y, label="Original Data", alpha=0.6)
+
+    # Linear regression
+    plt.plot(
+        x,
+        results["linear_regression"]["y_values"],
+        linestyle="--",
+        label="Linear Regression",
+    )
+
+    # Interpolation
+    plt.plot(
+        x,
+        results["interpolated_data"],
+        label="Linear Interpolation",
+        linewidth=2,
+    )
+
+    plt.title("Linear Regression and Interpolation")
+    plt.xlabel("X")
+    plt.ylabel("Y")
+    plt.legend()
+    plt.grid(True)
+
+    plt.tight_layout()
+    plt.show()
 
 
 # Si quieres probar tu código, descomenta las siguientes líneas y ejecuta el script
