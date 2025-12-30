@@ -56,7 +56,58 @@ def compare_monthly_sales(
     sales_year1: list, sales_year2: list, sales_year3: list, months: list
 ) -> t.Tuple[plt.Figure, plt.Axes, plt.Axes]:
     # Write here your code
-    pass
+
+    sales_year1 = np.array(sales_year1)
+    sales_year2 = np.array(sales_year2)
+    sales_year3 = np.array(sales_year3)
+
+    x = np.arange(len(months))
+    width = 0.35
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+
+    ax1.bar(x - width / 2, sales_year1, width, label="2020")
+    ax1.bar(x + width / 2, sales_year2, width, label="2021")
+
+    ax1.set_title("Monthly Sales Comparison: 2020 vs 2021")
+    ax1.set_xlabel("Months")
+    ax1.set_ylabel("Monthly Sales")
+    ax1.set_xticks(x)
+    ax1.set_xticklabels(months)
+    ax1.legend(loc="upper left")
+
+    ax1_twin = ax1.twinx()
+
+    ax1_twin.plot(
+        x,
+        np.cumsum(sales_year1),
+        marker="o",
+        linestyle="--",
+        label="Cumulative 2020",
+    )
+    ax1_twin.plot(
+        x,
+        np.cumsum(sales_year2),
+        marker="s",
+        linestyle="-",
+        label="Cumulative 2021",
+    )
+
+    ax1_twin.set_ylabel("Cumulative Sales")
+    ax1_twin.legend(loc="upper right")
+
+    ax2.pie(
+        sales_year3,
+        labels=months,
+        autopct="%1.1f%%",
+        startangle=90,
+    )
+    ax2.set_title("2022 Monthly Sales Distribution")
+    ax2.axis("equal")
+
+    plt.tight_layout()
+
+    return fig, ax1, ax2
 
 
 # Para probar el código, descomenta las siguientes líneas
