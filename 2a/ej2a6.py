@@ -38,20 +38,69 @@ import typing as t
 
 def gaussian(x: float, amplitude: float, mean: float, stddev: float) -> float:
     # Write here your code
-    pass
+    return amplitude * np.exp(-((x - mean) ** 2) / (2 * stddev ** 2))
 
 def gaussian_fit_and_integration(
     data_x: t.List[float], data_y: t.List[float]
 ) -> t.Tuple[t.Tuple[float], float]:
     # Write here your code
-    pass
+        # Convert inputs to NumPy arrays
+    x = np.array(data_x)
+    y = np.array(data_y)
+
+    # Initial parameter guess: amplitude, mean, stddev
+    initial_guess = [
+        np.max(y),
+        x[np.argmax(y)],
+        np.std(x),
+    ]
+
+    # ---- Gaussian curve fitting ----
+    params, _ = optimize.curve_fit(gaussian, x, y, p0=initial_guess)
+    amplitude, mean, stddev = params
+
+    # ---- Numerical integration over the range of data_x ----
+    integral, _ = integrate.quad(
+        gaussian, x.min(), x.max(), args=(amplitude, mean, stddev)
+    )
+
+    return ((amplitude, mean, stddev), integral)
 
 
 def plot_gaussian_fit(
     data_x: t.List[float], data_y: t.List[float], gaussian_params: t.Tuple[float]
 ):
     # Write here your code
-    pass
+    x = np.array(data_x)
+    y = np.array(data_y)
+
+    amplitude, mean, stddev = gaussian_params
+
+    # Dense x for smooth curve
+    x_dense = np.linspace(x.min(), x.max(), 400)
+    y_fit = gaussian(x_dense, amplitude, mean, stddev)
+
+    plt.figure(figsize=(10, 6))
+
+    # Original data
+    plt.scatter(x, y, label="Original Data", alpha=0.6)
+
+    # Gaussian fit
+    plt.plot(
+        x_dense,
+        y_fit,
+        label="Gaussian Fit",
+        linewidth=2,
+    )
+
+    plt.title("Gaussian Fit to Data")
+    plt.xlabel("X")
+    plt.ylabel("Y")
+    plt.legend()
+    plt.grid(True)
+
+    plt.tight_layout()
+    plt.show()
 
 
 # Si quieres probar tu código, descomenta las siguientes líneas y ejecuta el script
