@@ -49,14 +49,27 @@ import typing as t
 
 def create_matrices() -> t.Tuple[np.ndarray, np.ndarray, np.ndarray]:
     # Write here your code
-    pass
+    zeros_matrix = np.zeros((3, 3))
+    ones_matrix = np.ones((2, 4))
+    identity_matrix = np.eye(4)
+
+    return zeros_matrix, ones_matrix, identity_matrix
 
 
 def manipulate_matrices(
     zeros_matrix: np.ndarray, ones_matrix: np.ndarray, identity_matrix: np.ndarray
 ) -> t.Tuple[np.ndarray, np.ndarray, np.ndarray]:
     # Write here your code
-    pass
+    
+    zeros_matrix[1, 1] = 5
+
+    ones_matrix[:, 2] = 3
+
+    n = identity_matrix.shape[0]
+
+    identity_matrix[np.arange(n), np.arange(n - 1, -1, -1)] = 2
+
+    return zeros_matrix, ones_matrix, identity_matrix
 
 
 # Para probar el código:
