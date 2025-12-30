@@ -25,8 +25,16 @@ import numpy as np
 
 def simulate_dice_rolls(number: int) -> dict:
     # Write here your code
-    pass
+    if number <= 0:
+        raise ValueError("El número de lanzamientos debe ser un entero positivo.")
+    
+    rolls = np.random.randint(1, 7, size=number)
 
+    counts = np.bincount(rolls, minlength=7)[1:]
+
+    probabilities = {i + 1: counts[i] / number for i in range(6)}
+
+    return probabilities
 
 # Si quieres probar tu código, descomenta las siguientes líneas y ejecuta el script
 # num_rolls = 10000
