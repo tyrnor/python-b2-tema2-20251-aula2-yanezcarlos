@@ -31,14 +31,22 @@ from pathlib import Path
 
 def read_excel_sheet(file_path: str) -> pd.DataFrame:
     # Write here your code
-    pass 
+    return pd.read_excel(file_path, sheet_name='Sheet1')
 
 
 
 def read_excel_custom_sheet(file_path: str) -> pd.DataFrame:
     def is_not_empty_column(col):
         # Write here your code
-        pass
+        return not col.isnull().all()
+    
+    # Write here your code
+    df = pd.read_excel(file_path, sheet_name='Sheet2', header=None, usecols=range(7,14))
+    df.columns = ['Brand', 'Country', 'Review #', 'Stars', 'Style', 'Top Ten', 'Variety']
+    df = df.loc[:, df.apply(is_not_empty_column)]
+    df = df.dropna(how='all')
+    df = df.iloc[:-5]  # remove last 5 rows as footer
+    return df
 
 
 # Para probar el código, descomenta las siguientes líneas
