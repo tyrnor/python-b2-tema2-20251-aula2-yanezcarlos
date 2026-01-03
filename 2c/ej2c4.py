@@ -35,11 +35,17 @@ import pandas as pd
 
 def group_and_aggregate(df, group_columns, agg_dict):
     # Write here your code
-    pass
+    return df.groupby(group_columns).agg(agg_dict)
 
 def standardize_column_by_group(df, group_columns, column_to_standardize):
     # Write here your code
-    pass
+    df = df.copy()
+
+    standardized_col_name = f"{column_to_standardize}_Standardized"
+
+    df[standardized_col_name] = (df.groupby(group_columns)[column_to_standardize].transform(
+        lambda x: (x - x.mean()) / x.std()))
+    return df
 
 
 # Para probar el código, descomenta las siguientes líneas y asegúrate de que el path al archivo sea correcto
