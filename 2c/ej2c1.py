@@ -39,14 +39,27 @@ def select_rows_and_columns(
     df: pd.DataFrame, columns: Union[List[str], List[int]], rows: Optional[slice] = None
 ) -> pd.DataFrame:
     # Write here your code
-    pass
+    if all(isinstance(col, int) for col in columns):
+        selected_df = df.iloc[:, columns]   
+    else:
+        selected_df = df[columns]
+
+    if rows is not None:
+        selected_df = selected_df.iloc[rows]
+
+    return selected_df
 
 
 def select_rows_with_conditions(
     df: pd.DataFrame, conditions: Union[str, List[str]]
 ) -> pd.DataFrame:
     # Write here your code
-    pass
+    if isinstance(conditions, str):
+        conditions = [conditions]   
+    
+    query_str = " & ".join(f"({cond})" for cond in conditions)
+    filtered_df = df.query(query_str)
+    return filtered_df
 
 
 # Para probar el código, descomenta las siguientes líneas y asegúrate de tener un archivo CSV 'data/grades.csv'
