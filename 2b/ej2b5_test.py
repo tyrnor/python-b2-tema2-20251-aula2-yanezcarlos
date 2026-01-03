@@ -9,7 +9,10 @@ URL = "https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_popul
 
 def test_read_population_data():
     # Check if the Wikipedia page is reachable
-    response = requests.get(URL)
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    }
+    response = requests.get(URL, headers=headers)
     assert response.status_code == 200, "Wikipedia page not reachable"
 
     # Check if tables can be read

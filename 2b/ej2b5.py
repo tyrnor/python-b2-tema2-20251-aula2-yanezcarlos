@@ -44,23 +44,43 @@ Salida esperada:
 
 import pandas as pd
 import typing as t
+import requests
+from io import StringIO
 
 
 def read_population_data(url: str, match_text: str = None) -> t.List[pd.DataFrame]:
     # Write here your code
-    pass
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    }
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+    
+    read_kwargs = {
+        "attrs": {"class": "wikitable"},
+        "na_values": ["-", "None"],
+    }
+
+    if match_text is not None:
+        read_kwargs["match"] = match_text
+
+    tables = pd.read_html(StringIO(response.text), **read_kwargs)
+    return tables
 
 
 def get_table_by_string_match(
     tables: t.List[pd.DataFrame], match_text: str
 ) -> t.Union[pd.DataFrame, None]:
     # Write here your code
-    pass
+    for table in tables:
+        if match_text in table.to_string():
+            return table
+    return None
 
 
 def count_tables(tables: t.List[pd.DataFrame]) -> int:
     # Write here your code
-    pass
+    return len(tables)
 
 
 # Para probar el código, descomenta las siguientes líneas
