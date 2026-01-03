@@ -46,16 +46,20 @@ from pathlib import Path
 
 def read_json_basic(file_path: str) -> pd.DataFrame:
     # Write here your code
-    pass
+    return pd.read_json(file_path, lines=True)
 
 
 def read_json_with_orientation(file_path: str, orient: str) -> pd.DataFrame:
     # Write here your code
-    pass
+    return pd.read_json(file_path, orient=orient)
+
 
 def read_json_and_normalize(file_path: str, record_path: t.List[str]) -> pd.DataFrame:
     # Write here your code
-    pass
+    data = pd.read_json(file_path)
+    key = record_path[0]
+    return pd.json_normalize(data[key])
+
 
 # Para probar el código, descomenta las siguientes líneas
 # current_dir = Path(__file__).parent
