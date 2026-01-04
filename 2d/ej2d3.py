@@ -40,7 +40,18 @@ def perform_linear_regression(
     data: pd.DataFrame, variable_1: str, variable_2: str
 ) -> Tuple[float, float, float, float, float]:
     # Write here your code
-    pass
+    x = data[variable_1]
+    y = data[variable_2]
+
+    result = linregress(x, y)
+
+    return (
+        float(result.slope),
+        float(result.intercept),
+        float(result.rvalue),
+        float(result.pvalue),
+        float(result.stderr),
+    )
 
 
 def plot_regression_line(
@@ -52,7 +63,28 @@ def plot_regression_line(
     return_fig_ax_test=False,
 ):
     # Write here your code
-    pass
+    x = data[variable_1]
+    y = data[variable_2]
+
+    x_vals = np.array(x)
+    y_vals = slope * x_vals + intercept
+
+    fig, ax = plt.subplots()
+
+    ax.scatter(x,y)
+
+    ax.plot(x_vals, y_vals)
+
+    ax.set_xlabel(variable_1)
+    ax.set_ylabel(variable_2)
+    ax.set_title(f'Linear Regression between {variable_1} and {variable_2}')
+
+    plt.tight_layout()
+
+    if return_fig_ax_test:
+        return fig, ax
+    
+    plt.show()
 
 
 # Para probar el código, descomenta este código
