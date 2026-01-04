@@ -34,25 +34,33 @@ from pathlib import Path
 import pandas as pd
 from scipy import stats
 
+def _load_numeric_values(file_path: str):
+    df = pd.read_csv(file_path)
+
+    return df.select_dtypes(include="number").values.squeeze()
 
 def calculate_mean(file_path: str) -> float:
     # Write here your code
-    pass
+    values = _load_numeric_values(file_path)
+    return float(stats.tmean(values))
 
 
-def calculate_mean(file_path: str) -> float:
+def calculate_variance(file_path: str) -> float:
     # Write here your code
-    pass
+    values = _load_numeric_values(file_path)
+    return float(stats.tvar(values))
 
 
 def calculate_skewness(file_path: str) -> float:
     # Write here your code
-    pass
+    values = _load_numeric_values(file_path)
+    return float(stats.skew(values))
 
 
 def calculate_kurtosis(file_path: str) -> float:
     # Write here your code
-    pass
+    path = _load_numeric_values(file_path)
+    return float(stats.kurtosis(path))
 
 
 # Para probar el código, descomenta las siguientes líneas
