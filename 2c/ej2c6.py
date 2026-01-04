@@ -36,17 +36,38 @@ from sklearn.preprocessing import StandardScaler
 
 def prepare_data_for_pca(file_path: str) -> pd.DataFrame:
     # Write here your code
-    pass
+    df = pd.read_csv(file_path, skiprows=14)
+    numeric_df = df.select_dtypes(include=["number"])
+    if "MEDV" in numeric_df.columns:
+        numeric_df = numeric_df.drop(columns=["MEDV"])
+    return numeric_df
 
 
 def perform_pca(data: pd.DataFrame, n_components: int) -> PCA:
     # Write here your code
-    pass
+    scaler = StandardScaler()
+    scaled_data = scaler.fit_transform(data)
+    pca = PCA(n_components=n_components)
+    pca.fit(scaled_data)
+    return pca
 
 
 def plot_pca_results(pca: PCA) -> tuple:
-    # Write here your code
-    pass
+    explained_variance = pca.explained_variance_ratio_
+
+    fig, ax = plt.subplots()
+    ax.bar(
+        range(1, len(explained_variance) + 1),
+        explained_variance
+    )
+
+    ax.set_xlabel("Principal Component")
+    ax.set_ylabel("Explained Variance Ratio")
+    ax.set_title("PCA Explained Variance")
+
+    plt.tight_layout()
+
+    return fig, ax
 
 
 # Para probar el código, descomenta las siguientes líneas
