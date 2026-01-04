@@ -40,20 +40,40 @@ import matplotlib.pyplot as plt
 
 def prepare_data_for_clustering(file_path: str) -> pd.DataFrame:
     # Write here your code
-    pass
+    df = pd.read_csv(file_path)
+
+    df_numeric = df.select_dtypes(include=[np.number])
+
+    scaler = StandardScaler()
+    scaled_data = scaler.fit_transform(df_numeric)
+
+    return scaled_data
 
 
 def perform_kmeans_clustering(data: np.ndarray, n_clusters: int) -> np.ndarray:
     # Write here your code
-    pass
+    kmeans = KMeans(n_clusters=n_clusters, random_state=42)
+    labels = kmeans.fit_predict(data)
+    return labels
 
 
 def visualize_clusters(
     data: np.ndarray, labels: np.ndarray, is_testing_execution: bool = False
 ) -> Tuple[np.ndarray, plt.Figure, plt.Axes]:
     # Write here your code
-    pass
+    pca = PCA(n_components=2)
+    data_reduced = pca.fit_transform(data)
 
+    fig, ax = plt.subplots()
+    scatter = ax.scatter(
+        data_reduced[:, 0], data_reduced[:, 1], c=labels, cmap='viridis', alpha=0.7
+    )
+
+    ax.set_title("KMeans Clustering")
+    ax.set_xlabel("PCA Component 1")
+    ax.set_ylabel("PCA Component 2")
+
+    return data_reduced, fig, ax
 
 # Para probar el código, desconmenta las siguientes líneas
 # if __name__ == '__main__':
