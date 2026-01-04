@@ -40,7 +40,14 @@ def calculate_pearson_correlation(
     file_path: str, var1: str, var2: str
 ) -> (float, float):
     # Write here your code
-    pass
+    df = pd.read_csv(file_path, skiprows=14)
+
+    x = df[var1]
+    y = df[var2]
+
+    correlation, p_value = stats.pearsonr(x, y)
+
+    return float(correlation), float(p_value)
 
 
 # Para probar el código, descomenta las siguientes líneas
