@@ -62,9 +62,13 @@ def pairplot_graphic(
     df: pd.DataFrame, columns: Optional[List[str]] = None, **viz_params: Dict[str, str]
 ) -> sns.PairGrid:
     # Write here your code
-    
+
     if columns is not None:
-        plot_df = df[columns + [viz_params.get("hue")]] if "hue" in viz_params else df[columns]
+        plot_df = (
+            df[columns + [viz_params.get("hue")]]
+            if "hue" in viz_params
+            else df[columns]
+        )
     else:
         plot_df = df
 
