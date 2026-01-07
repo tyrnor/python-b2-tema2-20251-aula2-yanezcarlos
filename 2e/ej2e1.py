@@ -6,7 +6,7 @@ utilizando Pandas y Matplotlib. El objetivo es explorar las características de 
 diccionario_colores = {0: 'green', 1: 'red', 2: 'blue'}.
 
 Funciones a desarrollar:
-    
+
 - plot_area_graph(df, column_name, ax=None) -> None
     Descripción: Genera un gráfico de área para visualizar la distribución de un atributo específico entre las diferentes
     especies de iris. El eje X representa el índice del DataFrame, y el eje Y representa el valor del atributo especificado
@@ -37,15 +37,57 @@ from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
 
+diccionario_colores = {0: "green", 1: "red", 2: "blue"}
+
 
 def plot_area_graph(df, column_name, ax=None):
     # Write here your code
-    pass
+    if ax is None:
+        fig, ax = plt.subplots()
+    else:
+        fig = ax.figure
+
+    for species, color in diccionario_colores.items():
+        subset = df[df["target"] == species]
+        ax.fill_between(
+            subset.index,
+            subset[column_name],
+            color=color,
+            alpha=0.5,
+            label=f"Species {species}",
+        )
+
+    ax.set_xlabel("Index")
+    ax.set_ylabel(column_name)
+    ax.set_title(f"Area Graph of {column_name}")
+    ax.legend()
+
+    return fig, ax
 
 
 def plot_scatter_graph(df, column_name_x, column_name_y, ax=None):
     # Write here your code
-    pass
+    if ax is None:
+        fig, ax = plt.subplots()
+    else:
+        fig = ax.figure
+
+    for species, color in diccionario_colores.items():
+        subset = df[df["target"] == species]
+        ax.scatter(
+            subset[column_name_x],
+            subset[column_name_y],
+            color=color,
+            label=f"Species {species}",
+            alpha=0.7,
+        )
+
+    ax.set_xlabel(column_name_x)
+    ax.set_ylabel(column_name_y)
+    ax.set_title(f"Scatter Plot of {column_name_x} vs {column_name_y}")
+    ax.legend()
+
+    return fig, ax
 
 
 # Para probar el código, descomenta las siguientes líneas
