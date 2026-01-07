@@ -51,17 +51,43 @@ from pandas.core.frame import DataFrame
 
 def create_histograms(df: DataFrame, features: List[str]) -> Figure:
     # Write here your code
-    pass
+    n_features = len(features)
+    n_cols = 3
+    n_rows = (n_features + n_cols - 1) // n_cols
+
+    fig, axes = plt.subplots(n_rows, n_cols, figsize=(5 * n_cols, 4 * n_rows))
+    axes = axes.flatten()
+
+    for i, feature in enumerate(features):
+        sns.histplot(
+            data=df,
+            x=feature,
+            hue="target",
+            kde=True,
+            ax=axes[i],
+            element="step",
+        )
+        axes[i].set_title(f"Histogram of {feature}")
+    
+    for j in range(n_features, len(axes)):
+        axes[j].set_visible(False)
+    fig.tight_layout()
+    return fig
+
 
 
 def save_img_pickle(fig: Figure, filename: str) -> None:
     # Write here your code
-    pass
+    with open(filename, "wb") as f:
+        pickle.dump(fig, f)
 
 
 def load_and_display_figure(filename: str) -> Figure:
     # Write here your code
-    pass
+    with open(filename, "rb") as f:
+        fig = pickle.load(f)
+    fig.show()
+    return fig
 
 
 # Para probar el código, descomenta las siguientes líneas
