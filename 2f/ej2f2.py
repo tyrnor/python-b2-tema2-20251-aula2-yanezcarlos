@@ -66,24 +66,62 @@ def train_model(
     X: np.ndarray, y: np.ndarray, test_size: float = 0.3, random_state: int = 42
 ) -> Tuple[BaseEstimator, np.ndarray, np.ndarray]:
     # Write here your code
-    pass
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=test_size, random_state=random_state
+    )
+
+    model = RandomForestClassifier(random_state=random_state)
+    model.fit(X_train, y_train)
+
+    return model, X_test, y_test
 
 
 def save_model(model: BaseEstimator, filename: str) -> bool:
     # Write here your code
-    pass
+    try:
+        with open(filename, "wb") as f:
+            pickle.dump(model, f)
+        return True
+    except Exception:
+        return False
 
 
 def load_model_and_predict(filename: str, X_test: np.ndarray) -> np.ndarray:
     # Write here your code
-    pass
+    with open(filename, "rb") as f:
+        model = pickle.load(f)
+
+    predictions = model.predict(X_test)
+    return predictions
 
 
 def plot_feature_importance(
     model: BaseEstimator, feature_names: List[str], figsize: Tuple[int, int] = (12, 8)
 ) -> plt.Figure:
     # Write here your code
-    pass
+    importances = model.feature_importances_
+    indices = np.argsort(importances)[::-1]
+
+    fig, ax = plt.subplots(figsize=figsize)
+
+    ax.bar(
+        range(len(importances)),
+        importances[indices],
+        align="center",
+    )
+    ax.set_xticks(range(len(importances)))
+    ax.set_xticklabels(
+        [feature_names[i] for i in indices],
+        rotation=45,
+        ha="right",
+    )
+
+    ax.set_title("Feature Importance")
+    ax.set_ylabel("Importance")
+    ax.set_xlabel("Features")
+
+    fig.tight_layout()
+    return fig
 
 
 # Para probar el código, descomenta las siguientes líneas
